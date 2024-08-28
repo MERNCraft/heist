@@ -5,6 +5,10 @@
    counter-set: step 1;
  }
 
+ * {
+   user-select: none;
+ }
+
  /* GENERIC STYLES */
 div {
   position: absolute;
@@ -56,7 +60,6 @@ div.ground {
   span.enter {
     background-color: #060;
     border: 1vw outset #070;
-    border-left-width: 0;
     border-top-right-radius: 100%;
     border-bottom-right-radius: 100%;
     box-sizing: border-box;
@@ -101,16 +104,22 @@ div.wait {
    * the beginning, but it will not intercept pointer
    * events until .button:hover makes div.wait's
    * pointer-events active, by which time the .ground .enter
-   * span is no longer displayed.
+   * span is no longer displayed. It needs to change without
+   * any transition when morphing from an Exit button at the
+   * end to an Enter button to play again.
    */
+  & > span.enter {
+    transition: all 0s;
+  }
+
   span.cabin {
     left: 64vw;
     width: 32vw;
     height: 32vw;
     background-color: #9c9;
-    /* pointer-events: none;  */
     /* wait for the lift animation to end first */
 
+    /* Decorate the inside of the lift */
     &::before {
       content: " ";
       display: block;
@@ -365,6 +374,8 @@ body:has(.rise:hover) {
         font-size: 6vw;
         line-height: 14vw;
 
+        transition: all 1s;
+
         span {
           display: none;
         }
@@ -512,7 +523,7 @@ body:has(.safe:hover, .steal:hover) {
 body:has(.steal .cabin:hover,.drop:hover) {
   .steal {
     .cabin .door {
-      animation: lift-close var(--duration) forwards linear;
+      animation: lift-close var(--duration) forwards linear!important;
     }
   }
 
@@ -604,14 +615,14 @@ body:has(div.drop:hover) {
     }
 
     span.enter {
-      /* background-color: #060;
-      border: 1vw outset #070; */
+      /* Make opacity change with no transition */
       transition-property:
         width,
         height,
         font-size,
         line-height;
-      transition-duration: var(--duration), var(--duration), var(--duration), var(--duration);
+      transition-duration: var(--duration);
+
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
       border-top-left-radius: 100%;
