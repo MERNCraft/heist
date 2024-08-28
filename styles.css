@@ -1,0 +1,810 @@
+ body {
+   margin: 0;
+   background-color: #333;
+   --duration: 1s;
+   counter-set: step 1;
+   height: 100vh;
+ }
+
+ /* GENERIC STYLES */
+div {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 96vw;
+  height: 32vw;
+  font-size: 12vw;
+  pointer-events: none;
+  transition: all var(--duration);
+}
+
+
+div.rise,
+.rise div {
+  opacity: 0;
+}
+
+span {
+  position: absolute;
+  display: inline-block;
+  width: 32vw;
+  height: 32vw;
+  line-height: 30vw;
+  text-align: center;
+  background-color: #686;
+  transition: all var(--duration);
+}
+
+/* SPECIFIC STYLES: ground floor */
+div.ground {
+  position: relative;
+  width: 100vw; /* = 96vw + 2 * 2v; */
+  height: 36vw; /* = 32vw + 2 * 2vw */
+  border-style: solid;
+  border-color: #222;
+  border-top-width: 2vw;
+  border-left-width: 2vw;
+  border-right-width: 2vw;
+  border-bottom-width: 2vw;
+  box-sizing: border-box;
+/*
+  transition: border var(--duration); */
+
+  & > span {
+    transition: all var(--duration);
+  }
+
+  span.enter {
+    background-color: #060;
+    border: 1vw outset #070;
+    border-left-width: 0;
+    border-top-right-radius: 100%;
+    border-bottom-right-radius: 100%;
+    box-sizing: border-box;
+
+    &::after {
+      content: "Enter"
+    }
+  }
+
+  & > span.enter {
+    pointer-events: all;
+    /* Show Enter in front of div.carpet (and all other
+     * divs). If the Enter button receives :hover again,
+     * then .carpet will no longer have :hover, and step 2
+     * will be shown again.
+     * When span.button receives :hover, it activates
+     * div.wait, which contains an identical Enter button
+     * (which is actually the one you see), and this Enter
+     * button will be set to display: none.
+     */
+    z-index: 1;
+  }
+}
+
+div.carpet {
+  line-height: 32vw;
+  background-color: #686;
+
+  &::after {
+    content: ">>>>>>>>>";
+  }
+
+  span.button {
+    left: 57vw;
+    width: 7vw;
+    background-color: transparent;
+  }
+}
+
+div.wait {
+  /* The Enter button in div.wait will be visible from
+   * the beginning, but it will not intercept pointer
+   * events until .button:hover makes div.wait's
+   * pointer-events active, by which time the .ground .enter
+   * span is no longer displayed.
+   */
+  span.cabin {
+    left: 64vw;
+    width: 32vw;
+    height: 32vw;
+    background-color: #9c9;
+    /* pointer-events: none;  */
+    /* wait for the lift animation to end first */
+
+    &::before {
+      content: " ";
+      display: block;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      border-width: 8vw;
+      border-style: solid;
+      border-top-color: #ffe;
+      border-top-width: 2vw;
+      border-left-color: #696;
+      border-right-color: #696;
+      border-bottom-width: 4vw;
+      border-bottom-color: #565;
+    }
+
+    span { /* .doors and .text */
+      position: absolute;
+      top: 0;
+      left: 0;
+      line-height: 14vw;
+
+      &.door {
+        background-color: #888;
+      }
+      &.text {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+div.rise > .cabin .text {
+  line-height: 50vw;
+}
+
+div.drop .cabin .crack,
+div.rise .cabin .crack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 32vw;
+  width: 0.5vw;
+  border-right: 1px solid black;
+  border-top-right-radius: 100%;
+  background-color: #666;
+  opacity: 0;
+}
+
+div.slip span.exit {
+  border-top-left-radius: 100%;
+  border-bottom-left-radius: 100%;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+span.success {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 96vw!important;
+  height: 32vw!important;
+  font-size: 24vw!important;
+  background-color: goldenrod;
+  opacity: 0;
+}
+
+/* ... top floor */
+div.top-floor {
+  background-color: #060;
+  transition: all var(--duration);
+  opacity: 0;
+
+  span.cabin {
+    left: 64vw;
+    width: 32vw;
+    height: 32vw;
+  }
+  span {
+    background-color: transparent;
+  }
+  span.office {
+    width: 64vw;
+
+    span.boss {
+      font-size: 10vw;
+      left: 32vw;
+      line-height: 1.75em;
+      z-index: 1;
+
+      /* Sign on boss's desk */
+      &::before {
+        content: "BOSS";
+        padding: 0.3em 0.3em 0.1em;
+        border: 1px solid white;
+        transition: border 0s;
+      }
+    }
+  }
+}
+
+div.nick {
+  opacity: 1;
+  /* Safe in corner of office... */
+  span.safe {
+    left: 0;
+    bottom: 0;
+    width: 16vw;
+    height: 16vw;
+    color: #333;
+    font-size: 8vw;
+    background-color: #333;
+    text-align: left;
+    line-height: 17vw;
+    display: flex;
+    justify-content: stretch;
+
+    /* ...with a solid body... */
+    &::before {
+      content: "Saf";
+      display: inline-block;
+      height: 16vw;
+      background-color: #666;
+      border-right: 1px solid black;
+    }
+    /* ... and a door. */
+    &::after {
+      content: "e";
+      display: inline-block;
+      height: 16vw;
+      /* padding-right: 1.5vw; */
+      background-color: #666;
+      border-left: 1px solid black;
+      box-sizing: border-box;
+      flex: 1;
+    }
+  }
+
+  span.cabin {
+    .door {
+      left: 100%;
+      width: 0%;
+    }
+  }
+}
+
+
+/* INTERACTIONS: ground floor */
+
+
+span.enter:hover + div.carpet,
+div.carpet:hover {
+  pointer-events: all;
+
+  /* Make backgrounds look interactive */
+  &,
+  > span {
+    background-color: #080;
+  }
+  span.button {
+    background-color: #0003;
+  }
+}
+
+.ground:has(span.button:hover, div.wait:hover) {
+  /* Hide the .ground Enter button */
+  & > .enter {
+    display: none;
+  }
+
+  div.wait {
+    pointer-events: all;
+
+    /* Bring the lift down... */
+    div.lift {
+      & > .cabin {
+        .text {
+          animation: lift-down var(--duration) forwards linear;
+        }
+        /* ... open the doors... */
+        .door {
+          animation: lift-open var(--duration) var(--duration) forwards linear;
+        }
+      }
+
+      /* ... and prepare to go up again. */
+      animation: activate 0.1s calc(2 * var(--duration)) forwards;
+    }
+  }
+}
+
+/* When you enter the lift... */
+body:has(.cabin:hover, .rise:hover) {
+  /* ... close the _same_ .lift doors (with !important)... */
+  .lift > .cabin .door {
+    animation: lift-close var(--duration) forwards linear !important;
+  }
+  div.rise {
+    animation: activate 0.1s var(--duration) forwards;
+  }
+}
+
+body:has(.rise:hover) {
+  /* Maintain closed lift doors in a fixed place...*/
+  div.rise {
+    opacity: 1;
+    /* Move an equal and opposite amount to the ground */
+    top: -12vw;
+    left: -40vw;
+    transition-property: opacity, top, left;
+    transition-duration: 0s, var(--duration), var(--duration);
+
+    /* Show Lift text rising */
+    > .cabin .text {
+      line-height: 50vw;
+      animation: lift-up var(--duration) forwards linear;
+    }
+
+    /* Activate top floor and open-door animation when up */
+    div.top-floor {
+      animation: activate 0.1s var(--duration) forwards;
+
+      > .cabin span.door {
+        animation: lift-open var(--duration) var(--duration) forwards linear;
+      }
+    }
+  }
+
+  /* ... while the ground floor moves "away" */
+  div.ground {
+    border-top-width: 14vw;
+    border-left-width: 42vw;
+    border-right-width: 10vw;
+    border-bottom-width: 6vw;
+
+    div.carpet,
+    div.wait,
+    div.lift {
+      width: 48vw;
+      height: 16vw;
+      font-size: 6vw;
+      line-height: 16vw;
+    }
+
+    div.carpet,
+    div.wait,
+    div.lift,
+    & {
+      > span {
+        width: 16vw;
+        height: 16vw;
+        font-size: 6vw;
+        line-height: 14vw;
+
+        span {
+          display: none;
+        }
+
+        &.button {
+          left: 24vw;
+        }
+        &.cabin {
+          left: 32vw;
+
+          &::before {
+            border-width: 4vw;
+            border-top-width: 1vw;
+            border-bottom-width: 2vw;
+          }
+        }
+      }
+    }
+  }
+
+  div.rise {
+    pointer-events: all;
+  }
+}
+
+
+body:has(div.lift div.top-floor:hover) {
+  /* Block the office until after the boss fight */
+  span.office {
+    pointer-events: none;
+
+    .boss {
+      pointer-events: all;
+    }
+  }
+}
+/* When you enter the boss's office, you must go past
+ * the boss with your mouse, or tap on the boss. This
+ * will activate the office itself, and if there is a
+ * mouse/tap on the office (but not the boss) when
+ * the office is active, the boss will be deactivated.
+ */
+ .rise .top-floor span.office:hover,
+ .rise .top-floor span.office:has(.boss:hover) {
+   pointer-events: all;
+ }
+ body span.office {
+   /* ... !important remove the "desk" the BOSS is at */
+   .boss:hover{
+     &::before {
+       content: "BOSS";
+       border-color: transparent!important;
+     }
+     /* ... indicate that this is a fight */
+     &::after {
+       content: "FIGHT";
+       display: block;
+     }
+     /* ... with visual "sound" effects */
+     animation: fight 0.5s step-end infinite;
+   }
+
+   &:has(~ .nick:hover),
+   &:hover:has(.boss:not(:hover)) {
+     /* The boss was tapped/hovered and then the active
+      * office was tapped/hovered, so the boss was
+      * defeated. Show an inactive, skewed boss.
+      */
+     .boss {
+      transition: all 0s;
+       transform: rotateX(55deg) skew(30deg);
+       pointer-events: none!important; /* no resurrection! */
+
+       &::before {
+         content: "BOSS";
+         padding: 0.3em 0.3em 0.1em;
+         border: 1px solid white;
+         filter: drop-shadow(0 1vw 1vw #000)
+       }
+       &::after {
+         content: "BOSS";
+         position: relative;
+         padding: 0.3em 0.3em 0.1em;
+         color: transparent;
+         border: 1px solid black;
+         top: 1vw;
+         left: -31.5vw;
+       }
+     }
+
+     & ~ .nick {
+       pointer-events: all;
+     }
+   }
+
+   & + .safe {
+     pointer-events: all;
+   }
+ }
+
+body:has(.safe:hover, .steal:hover) {
+   span.safe {
+    transition: all 0s;
+    transform: skew(-5deg);
+
+    &::before {
+      content: "Saf";
+      color: #000;
+    }
+    &::after {
+      content: "e";
+      color: #333;
+      transform: rotateX(75deg) translate(30vw,20vw) skew(-22.5deg) ;
+    }
+  }
+
+  .cabin .text {
+    opacity: 0;
+  }
+
+  .steal {
+    transition: all 0s;
+    pointer-events: all;
+    opacity: 1;
+    background-image:
+      radial-gradient(
+        ellipse at center,
+        rgba(0,0,0,1) 0%,
+        rgba(125,185,232,0) 50%
+      );
+    background-position: -40vw 16vw;
+    background-repeat: no-repeat;
+
+    .cabin {
+      .text {
+        transition: transform 0.25s;
+        opacity: 1;
+        transform: rotate(60deg) translate(-4vw, 8vw);
+      }
+    }
+  }
+}
+
+
+body:has(.steal .cabin:hover,.drop:hover) {
+  .steal {
+    .cabin .door {
+      animation: lift-close var(--duration) forwards linear;
+    }
+  }
+
+  div.drop {
+    animation: activate 0.1s var(--duration) forwards;
+  }
+}
+
+body:has(div.drop:hover) {
+  div.top-floor {
+    opacity: 0!important;
+  }
+
+  /* Maintain closed lift doors in a fixed place...*/
+  div.rise {
+    opacity: 1;
+    /* Move an equal and opposite amount to the ground */
+    top: 0vw;
+    left: 0vw;
+    transition-property: opacity, top, left;
+    transition-duration: 0s, var(--duration), var(--duration);
+
+    /* Show Lift text rising */
+    > .cabin .text {
+      transition: all 0s;
+      opacity: 1;
+      line-height: 14vw;
+      animation: fall var(--duration) forwards linear !important;
+    }
+
+    /* Activate top floor and open-door animation when up */
+    div.top-floor {
+      animation: activate 0.1s var(--duration) forwards;
+
+      > .cabin span.door {
+        animation: lift-open var(--duration) var(--duration) forwards linear;
+      }
+    }
+  }
+
+  div.ground {
+    border-top-width: 2vw;
+    border-left-width: 2vw;
+    border-right-width: 2vw;
+    border-bottom-width: 2vw;
+
+    div.carpet,
+    div.wait,
+    div.lift {
+      width: 96vw;
+      height: 32vw;
+      font-size: 12vw;
+      line-height: 32vw;
+    }
+
+    div.carpet,
+    div.wait,
+    div.lift,
+    & {
+      > span {
+        width: 32vw;
+        height: 32vw;
+        font-size: 12vw;
+        line-height: 30vw;
+
+        span {
+          display: none;
+        }
+
+        &.button {
+          opacity: 0;
+          left: 48vw;
+        }
+        &.cabin {
+          left: 64vw;
+
+          &::before {
+            border-width: 8vw;
+            border-top-width: 2vw;
+            border-bottom-width: 4vw;
+          }
+        }
+      }
+    }
+
+    div.carpet::after {
+      content: "<<<<<<<<<";
+      margin-left: 3vw;
+    }
+
+    span.enter {
+      /* background-color: #060;
+      border: 1vw outset #070; */
+      transition-property:
+        width,
+        height,
+        font-size,
+        line-height;
+      transition-duration: var(--duration), var(--duration), var(--duration), var(--duration);
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-top-left-radius: 100%;
+      border-bottom-left-radius: 100%;
+
+      &::after {
+        content: "Exit"
+      }
+    }
+  }
+}
+
+
+body:has(
+  div.drop .cabin:hover,
+  div.slip:hover
+) {
+  div.rise .cabin .crack {
+    opacity: 1;
+  }
+
+  &,
+  div.slip {
+    pointer-events: all;
+  }
+
+  div.rise .cabin .door {
+    animation: lift-jemmy 5s 2s forwards linear;
+  }
+
+  div.slip .exit {
+    animation: activate 0.1s 7s forwards;
+  }
+}
+
+
+body:has(
+  div.slip span.exit:hover,
+  div.free:hover
+) {
+  div.free {
+    pointer-events: all;
+  }
+
+  span.success {
+    z-index: 1;
+    opacity: 1;
+  }
+}
+
+
+
+
+
+@counter-style steps {
+  system: cyclic;
+  symbols:
+    ". Enter the building"
+    ". Go down the corridor"
+    ". Call the lift"
+    ". Wait for the lift"
+    ". Take the lift to the executive floor"
+    ". Mind the doors!"
+    ". Deal with the boss"
+    ". Open the safe"
+    ". Go back down in the lift"
+    ". Open the lift"
+    ". LEAVE THE BUILDING!"
+    ". Now where will you run...?"
+    ;
+  suffix: "";
+}
+
+div:hover {
+  counter-increment: step;
+}
+p.steps {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  z-index: 1;
+  font-size: 1rem;
+  text-align: center;
+  pointer-events: none;
+
+  span {
+    /* Override generic span settings */
+    position: relative;
+    width: auto;
+    height: 1.5rem;
+    line-height: 1.7rem;
+    /* Custom settings */
+    padding: 0 0.5em;
+    border-radius: 1rem;
+    background-color: gold;
+
+    &::before {
+      content: counter(step) counter(step, steps);
+    }
+  }
+}
+
+@keyframes lift-down {
+  from { line-height: 14vw }
+  to { line-height: 50vw }
+}
+
+@keyframes lift-open {
+  from { left: 0%; width: 100%; }
+  to { left: 100%; width: 0%; }
+}
+
+@keyframes activate {
+  from { pointer-events: none; }
+  to { pointer-events: all; opacity: 0.95}
+}
+
+@keyframes lift-close {
+  from { left: 100%; width: 0%; }
+  to { left: 0%; width: 100%; }
+}
+
+@keyframes lift-up {
+  from { line-height: 50vw }
+  to { line-height: 14vw }
+}
+
+@keyframes fade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes lift-jemmy {
+  0%  { left:  0%; width: 100%; }
+  10% { left:  5%; width:  95%; }
+  30% { left:  6%; width:  94%; }
+  31% { left: 15%; width:  85%; }
+  60% { left: 16%; width:  84%; }
+  61% { left: 20%; width:  80%; }
+  89% { left: 20%; width:  80%; }
+  90% { left: 30%; width:  70%; }
+ 100% { left: 33%; width:  67%; }
+}
+
+@keyframes fall {
+   0% { transform: rotate(60deg) translate(-4vw, 8vw) }
+  20% { transform: rotate(60deg) translate(7vw, 14vw) }
+  30% { transform: rotate(0deg)  translate(0vw, 24vw) }
+  40% { transform: rotateX(80deg) translate3d(0vw, -5vw,-18vw) }
+ 100% { transform: rotateX(80deg) translate3d(0vw, -5vw,-18vw)}
+}
+
+@keyframes fight {
+    0% { background-color: #f00 ;}
+   25% { background-color: #fff ;}
+   50% { background-color: #333 ;}
+   75% { background-color: #ff0 ;}
+  100% { background-color: #f00 ;}
+}
+
+
+/* pre {
+  display: none;
+
+  position: absolute;
+  top: 36vw;
+  left: 0;
+  width: 100vw;
+  white-space: pre-wrap;
+  background-color: #eee;
+  height: calc(100vh - 50vw);
+  overflow: auto;
+} */
+
+/* Show the GitHub logo */
+a.github {
+  width: 0;
+  height: 0;
+
+  img {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 32px;
+    height: 32px;
+    filter: grayscale(1);
+    opacity: 0.25;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
