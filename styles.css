@@ -3,7 +3,6 @@
    background-color: #333;
    --duration: 1s;
    counter-set: step 1;
-   height: 100vh;
  }
 
  /* GENERIC STYLES */
