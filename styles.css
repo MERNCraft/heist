@@ -399,10 +399,7 @@ body:has(.rise:hover) {
   div.rise {
     pointer-events: all;
   }
-}
 
-
-body:has(div.lift div.top-floor:hover) {
   /* Block the office until after the boss fight */
   span.office {
     pointer-events: none;
@@ -412,6 +409,8 @@ body:has(div.lift div.top-floor:hover) {
     }
   }
 }
+
+
 /* When you enter the boss's office, you must go past
  * the boss with your mouse, or tap on the boss. This
  * will activate the office itself, and if there is a
