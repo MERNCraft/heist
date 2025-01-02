@@ -9,6 +9,10 @@
    user-select: none;
  }
 
+ main {
+   overflow: hidden;
+ }
+
  /* GENERIC STYLES */
 div {
   position: absolute;
